@@ -71,7 +71,6 @@ set(lsd_SOURCE_FILES
   ${PROJECT_SOURCE_DIR}/src/Tracking/Sim3Tracker.cpp
   ${PROJECT_SOURCE_DIR}/src/Tracking/Relocalizer.cpp
   ${PROJECT_SOURCE_DIR}/src/Tracking/SE3Tracker.cpp
-  ${PROJECT_SOURCE_DIR}/src/Tracking/least_squares.cpp
   ${PROJECT_SOURCE_DIR}/src/Tracking/TrackingReference.cpp
   ${PROJECT_SOURCE_DIR}/src/IOWrapper/Timestamp.cpp
   ${PROJECT_SOURCE_DIR}/src/GlobalMapping/FabMap.cpp
@@ -112,5 +111,6 @@ add_executable(dataset src/main_on_images.cpp)
 target_link_libraries(dataset lsdslam ${catkin_LIBRARIES} ${G2O_LIBRARIES})
 
 # TODO add INSTALL
+
 
 
