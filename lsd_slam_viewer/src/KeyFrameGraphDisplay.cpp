@@ -42,6 +42,7 @@ KeyFrameGraphDisplay::~KeyFrameGraphDisplay()
 
 void KeyFrameGraphDisplay::draw()
 {
+	unsigned int flag = 0;
 	dataMutex.lock();
 	numRefreshedAlready = 0;
 
@@ -63,6 +64,7 @@ void KeyFrameGraphDisplay::draw()
 		printf("Flushing Pointcloud to %s!\n", (ros::package::getPath("lsd_slam_viewer")+"/pc_tmp.ply").c_str());
 		std::ofstream f((ros::package::getPath("lsd_slam_viewer")+"/pc_tmp.ply").c_str());
 		int numpts = 0;
+		unsigned char ch = 0;
 		for(unsigned int i=0;i<keyframes.size();i++)
 		{
 			if((int)i > cutFirstNKf)
@@ -74,20 +76,42 @@ void KeyFrameGraphDisplay::draw()
 		std::ofstream f2((ros::package::getPath("lsd_slam_viewer")+"/pc.ply").c_str());
 		f2 << std::string("ply\n");
 		f2 << std::string("format binary_little_endian 1.0\n");
+		f2 << std::string("comment VCGLIB generated\n");
 		f2 << std::string("element vertex ") << numpts << std::string("\n");
 		f2 << std::string("property float x\n");
 		f2 << std::string("property float y\n");
 		f2 << std::string("property float z\n");
-		f2 << std::string("property float intensity\n");
+		f2 << std::string("property float nx\n");
+		f2 << std::string("property float ny\n");
+		f2 << std::string("property float nz\n");
+		// f2 << std::string("property float intensity\n");
+		f2 << std::string("element face 0\n");
+		f2 << std::string("property list uchar int vertex_index\n");
 		f2 << std::string("end_header\n");
 
 		std::ifstream f3((ros::package::getPath("lsd_slam_viewer")+"/pc_tmp.ply").c_str());
-		while(!f3.eof()) f2.put(f3.get());
+		while(!f3.eof()){ 
+			// f2.put(f3.get());
+			ch = f3.get();
+			if (ch == 0xFF) 
+			{
+				flag = 1;
+				printf("got FF\n" );
+				continue;
+			}
+			if (flag == 1)
+			{
+				f2.put(0xFFu);
+				flag = 0;
+			}
+			f2.put(ch);
+		}
+		// f2.put(f3.get());
 
 		f2.close();
 		f3.close();
 
-		system(("rm "+ros::package::getPath("lsd_slam_viewer")+"/pc_tmp.ply").c_str());
+		// system(("rm "+ros::package::getPath("lsd_slam_viewer")+"/pc_tmp.ply").c_str());
 		flushPointcloud = false;
 		printf("Done Flushing Pointcloud with %d points!\n", numpts);
 

@@ -98,11 +98,7 @@ include_directories(
 
 # build shared library.
 add_library(lsdslam SHARED ${SOURCE_FILES})
-<<<<<<< HEAD
 target_link_libraries(lsdslam ${FABMAP_LIB} ${G2O_LIBRARIES} ${catkin_LIBRARIES} csparse cxsparse X11)
-=======
-target_link_libraries(lsdslam ${FABMAP_LIB} ${G2O_LIBRARIES} ${catkin_LIBRARIES} csparse cxsparse X11) 
->>>>>>> f64e50ff757b90aa5d564b83f3d90f6742b90678
 #rosbuild_link_boost(lsdslam thread)
 
 

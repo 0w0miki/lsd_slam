@@ -687,9 +687,9 @@ void SlamSystem::debugDisplayDepthMap()
 	}
 	if (displayDepthMap){
 		Util::displayImage( "DebugWindow DEPTH", map->debugImageDepth, false );
-		printf("displayDepthMap\n");
+		// printf("displayDepthMap\n");
 		// cv::imshow( "DebugWindow DEPTH", map->debugImageDepth);
-		printf("show debug window\n");
+		// printf("show debug window\n");
 		
 	}
 
@@ -860,7 +860,8 @@ void SlamSystem::gtDepthInit(uchar* image, float* depth, double timeStamp, int i
 }
 
 
-void SlamSystem::randomInit(uchar* image, double timeStamp, int id)
+// void SlamSystem::randomInit(uchar* image, double timeStamp, int id)
+void SlamSystem::randomInit(uchar* image, uchar* rgbImage, double timeStamp, int id)
 {
 	printf("Doing Random initialization!\n");
 
@@ -870,7 +871,8 @@ void SlamSystem::randomInit(uchar* image, double timeStamp, int id)
 
 	currentKeyFrameMutex.lock();
 
-	currentKeyFrame.reset(new Frame(id, width, height, K, timeStamp, image));
+	// currentKeyFrame.reset(new Frame(id, width, height, K, timeStamp, image));
+	currentKeyFrame.reset(new Frame(id, width, height, K, timeStamp, image, rgbImage));
 	map->initializeRandomly(currentKeyFrame.get());
 	keyFrameGraph->addFrame(currentKeyFrame.get());
 
@@ -893,10 +895,12 @@ void SlamSystem::randomInit(uchar* image, double timeStamp, int id)
 
 }
 
-void SlamSystem::trackFrame(uchar* image, unsigned int frameID, bool blockUntilMapped, double timestamp)
+// void SlamSystem::trackFrame(uchar* image, unsigned int frameID, bool blockUntilMapped, double timestamp)
+void SlamSystem::trackFrame(uchar* image, uchar* rgbImage, unsigned int frameID, bool blockUntilMapped, double timestamp)
 {
 	// Create new frame
-	std::shared_ptr<Frame> trackingNewFrame(new Frame(frameID, width, height, K, timestamp, image));
+	// std::shared_ptr<Frame> trackingNewFrame(new Frame(frameID, width, height, K, timestamp, image));
+	std::shared_ptr<Frame> trackingNewFrame(new Frame(frameID, width, height, K, timestamp, image, rgbImage));
 
 	if(!trackingIsGood)
 	{

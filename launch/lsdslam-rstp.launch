@@ -1,0 +1,14 @@
+<launch>
+    <arg name="bag" default="/media/yuki0w0/文件/工作/SLAM/lsdslam/LSD_room.bag" />
+    <arg name="calibration_file" default="/media/yuki0w0/文件/工作/SLAM/lsdslam/LSD_room_images/LSD_room/cameraCalibration.cfg" />
+    <arg name="video_stream_url" default="rtsp://192.168.1.113:8554/953394"/>
+    <node pkg="rocon_rtsp_camera_relay" name="rtsp_camera_relay" type="rocon_rtsp_camera_relay_node">
+        <param name="video_stream_url" value="$(arg video_stream_url)"/>
+    </node>
+    <node name="viewer" pkg="lsd_slam_viewer" type="viewer" output="screen" />
+    <node name="lsd_slam" pkg="lsd_slam_core" type="live_slam" output="screen">
+        <remap from="image" to="/rtsp_camera_relay/image" />
+        <!--<remap from="camera_info" to="/usb_cam/camera_info" />-->
+        <param name="calib" value="/home/yuki0w0/mobilephone.cfg" />
+    </node>
+</launch>

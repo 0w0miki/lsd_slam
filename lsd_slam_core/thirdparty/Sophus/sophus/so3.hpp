@@ -354,7 +354,7 @@ public:
                     - static_cast<Scalar>(1.0/48.0)*theta_sq
                     + static_cast<Scalar>(1.0/3840.0)*theta_po4;
       real_factor = static_cast<Scalar>(1)
-                    - static_cast<Scalar>(0.5)*theta_sq +
+                    - static_cast<Scalar>(1.0/8.0)*theta_sq +
                     static_cast<Scalar>(1.0/384.0)*theta_po4;
     } else {
       const Scalar sin_half_theta = std::sin(half_theta);

@@ -269,7 +269,8 @@ void KeyFrameDisplay::drawCam(float lineWidth, float* color)
 int KeyFrameDisplay::flushPC(std::ofstream* f)
 {
 
-	MyVertex* tmpBuffer = new MyVertex[width*height];
+	MyVertex* tmpBuffer = new MyVertex[width*height]; 
+	float zeroBuffer[3] = {0.0,0.0,0.0};
 	int num = 0;
 	for(int y=1;y<height-1;y++)
 		for(int x=1;x<width-1;x++)
@@ -313,7 +314,6 @@ int KeyFrameDisplay::flushPC(std::ofstream* f)
 			tmpBuffer[num].point[2] = pt[2];
 
 
-
 			tmpBuffer[num].color[3] = 100;
 			tmpBuffer[num].color[2] = originalInput[x+y*width].color[0];
 			tmpBuffer[num].color[1] = originalInput[x+y*width].color[1];
@@ -322,15 +322,23 @@ int KeyFrameDisplay::flushPC(std::ofstream* f)
 			num++;
 		}
 
-
+	printf("%d\n", tmpBuffer[1].color[0]);
 
 
 	for(int i=0;i<num;i++)
 	{
 		f->write((const char *)tmpBuffer[i].point,3*sizeof(float));
-		float color = tmpBuffer[i].color[0] / 255.0;
-		f->write((const char *)&color,sizeof(float));
+		f->write((const char *)zeroBuffer,3*sizeof(float));
+		
+		// f->write((const char *)&tmpBuffer[i].point[1],sizeof(float));
+		
+		// f->write((const char *)&tmpBuffer[i].point[2],sizeof(float));
+		
+		// float color = tmpBuffer[i].color[0] / 1.0;
+		// printf("%u\n", color);
+		// f->write((const char *)&color,sizeof(float));
 	}
+
 	//	*f << tmpBuffer[i].point[0] << " " << tmpBuffer[i].point[1] << " " << tmpBuffer[i].point[2] << " " << (tmpBuffer[i].color[0] / 255.0) << "\n";
 
 	delete tmpBuffer;
